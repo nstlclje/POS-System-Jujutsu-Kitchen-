@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POS System</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        color: #474F7A;
+        margin: 0;
+        padding: 0;
+        background-color: #FFD0EC;
+        display: flex;
+        flex-direction: row; 
+    }
+
+    .menu-container, .ordered-container {
+      flex: 1;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .menu {
+      background-color: #81689D;
+      border-radius: 10px;
+      text-align: center;
+      padding: 10px;
+      margin: 10px; 
+    }
+
+
+    .menu-items {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 10px; 
+      padding: 0 10px; 
+    }
+
+    .menu-item {
+      background-color: #9b8ab4;
+      padding: 10px; 
+      border-radius: 5px; 
+      border: 2px solid #81689D; 
+    }
+
+    .menu-item img {
+      max-width: 100%;
+      max-height: 150px; 
+      display: block;
+      margin: 0 auto 10px;
+      transition: transform 0.3s ease; 
+    }
+
+    .menu-item img:hover {
+      transform: scale(1.1); 
+    }
+
+    .menu-item p {
+      margin: 0;
+    }
+    .menu-title {
+      background-color: #1F2544; 
+      color: #FFD0EC;
+      padding: 5px 0;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .ordered-items {
+      background-color: #81689D;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+    .ordered-title {
+      background-color: #1F2544;
+      color: #FFD0EC;
+      padding: 5px 0;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .ordered-items-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 20px;
+      padding: 0; 
+      list-style-type: none; 
+    }
+    .ordered-item {
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .ordered-item p {
+      margin: 0;
+    }
+    .total {
+      margin-top: 20px;
+    }
+    .payment {
+      margin-top: 20px;
+      text-align: center;
+    }
+    input[type="number"] {
+      width: 50px;
+    }
+    input[type="submit"] {
+      background-color: #1F2544;
+      color: #FFD0EC;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #474F7A;
+    }
+
+    .print-receipt-container {
+      background-color: #81689D; 
+      color: #FFD0EC;
+      border-radius: 10px;
+      text-align: center;
+      padding: 10px;
+      margin: 10px; 
+    }
+
+    .print-receipt {
+      background-color: #FFD0EC;
+      border-radius: 10px;
+      padding: 20px;
+      color: #474F7A; 
+    }
+
+    .print-receipt h2 {
+      color: #1F2544; 
+    }
+
+    .print-receipt ul {
+      list-style-type: none; 
+      padding: 0;
+    }
+
+    .print-receipt li {
+      margin-bottom: 5px; 
+    }
+
+    .print-receipt strong {
+      color: #81689D; 
+    }
+
+    .print-button {
+      background-color: #1F2544;
+      color: #FFD0EC;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .print-button:hover {
+      background-color: #474F7A;
+    }
+    .search-container input[type="text"] {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #81689D; 
+    color: #474F7A; 
+    transition: border-color 0.3s ease; 
+  }
+
+  .search-container input[type="text"]:focus {
+    border-color: #1F2544;
+    outline: none; 
+  }
+
+  .search-container button {
+    background-color: #1F2544; 
+    color: #FFD0EC;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .search-container button:hover {
+    background-color: #474F7A;
+  }
+  </style>
+</head>
+<body>
+  <div class="menu">
+    <div class="menu-title">
+      <h2>MENU</h2>
+      
+    <!-- Search input field -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button id="search-button">Search</button>
+    </div>
+    </div>
+    <div class="menu-items">
+      <div class="menu-item" data-item="Gojo's Infinity Sushi" data-price="30">
+        <img src="assets/img/Gojo.png" alt="Gojo's Infinity Sushi">
+        <p>Gojo's Infinity Sushi - $30</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Sukuna's Spicy Ramen" data-price="30">
+        <img src="assets/img/Sukuna.png" alt="Sukuna's Spicy Ramen">
+        <p>Sukuna's Spicy Ramen - $30</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Geto's Grilled Teriyaki Chicken" data-price="30">
+        <img src="assets/img/Geto.png" alt="Geto's Grilled Teriyaki Chicken">
+        <p>Geto's Grilled Teriyaki Chicken - $30</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Itadori's Energetic Elixir" data-price="20">
+        <img src="assets/img/Itadori.png" alt="Itadori's Energetic Elixir">
+        <p>Itadori's Energetic Elixir - $20</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Fushiguro's Tranquil Tea" data-price="20">
+        <img src="assets/img/Fushiguro.png" alt="Fushiguro's Tranquil Tea">
+        <p>Fushiguro's Tranquil Tea - $20</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Kugisaki's Berry Blast Smoothie" data-price="20">
+        <img src="assets/img/Kugisaki.png" alt="Kugisaki's Berry Blast Smoothie">
+        <p>Kugisaki's Berry Blast Smoothie - $20</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Choso's Red Velvet Delight" data-price="25">
+        <img src="assets/img/Choso.png" alt="Choso's Red Velvet Delight">
+        <p>Choso's Red Velvet Delight - $25</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Nanami's Nutty Cheesecake" data-price="25">
+        <img src="assets/img/Nanami.png" alt="Nanami's Nutty Cheesecake">
+        <p>Nanami's Nutty Cheesecake - $25</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+      <div class="menu-item" data-item="Toji's Matcha Mochi Ice Cream" data-price="25">
+        <img src="assets/img/Toji.png" alt="Toji's Matcha Mochi Ice Cream">
+        <p>Toji's Matcha Mochi Ice Cream - $25</p>
+        <input type="number" class="quantity" value="0">
+        <input type="submit" class="add-button" value="Add to order">
+      </div>
+    </div>
+  </div>
+  <div class="ordered-container">
+    <div class="ordered-items">
+      <div class="ordered-title">
+        <h2>ORDERED ITEMS</h2>
+      </div>
+      <div class="ordered-items-list">
+        <div id="ordered-list" class="ordered-items"></div>
+      </div>
+      <div class="total">
+        <strong>Total:</strong> <span id="total-amount">$0</span>
+      </div>
+      <div class="payment">
+        <input type="number" id="paid-amount" placeholder="Enter amount paid">
+        <input type="submit" id="pay-button" value="Pay!">
+      </div>
+    </div>
+  </div>
+
+  <div class="print-receipt-container">
+    <div class="ordered-title" style="margin: 10px 0;">
+      <h2>RECEIPT</h2>
+    </div>
+    <input type="button" class="print-button" id="print-button" value="Print Receipt">
+  </div>
+
+  <script>
+    let orderedItems = {};
+    let totalAmount = 0;
+
+    function addToOrder(item, price, quantity) {
+      if (quantity > 0) {
+        if (orderedItems[item]) {
+          orderedItems[item] += quantity;
+        } else {
+          orderedItems[item] = quantity;
+        }
+        totalAmount += price * quantity;
+        document.getElementById('total-amount').innerText = '$' + totalAmount;
+        updateOrderedItems();
+        // Reset quantity to 0 after adding
+        const quantityInput = document.querySelector(`.menu-item[data-item="${item}"] .quantity`);
+        quantityInput.value = 0;
+      }
+    }
+
+    function updateOrderedItems() {
+      const orderedList = document.getElementById('ordered-list');
+      orderedList.innerHTML = '';
+      for (const item in orderedItems) {
+        const listItem = document.createElement('li');
+        listItem.classList.add('ordered-item');
+        listItem.innerHTML = `<p>${item} x${orderedItems[item]}</p>`;
+        orderedList.appendChild(listItem);
+      }
+    }
+
+    function calculateChange() {
+      const paidAmount = parseFloat(document.getElementById('paid-amount').value);
+      if (!isNaN(paidAmount)) {
+        const change = paidAmount - totalAmount;
+        if (change >= 0) {
+          alert(`Thanks for ordering! Here's your change: $${change.toFixed(2)}`);
+          resetOrder();
+        } else {
+          alert('Not enough balance. Please try again.');
+        }
+      } else {
+        alert('Please enter a valid amount.');
+      }
+    }
+
+    function resetOrder() {
+      orderedItems = {};
+      totalAmount = 0;
+      document.getElementById('total-amount').innerText = '$0';
+      document.getElementById('paid-amount').value = '';
+      updateOrderedItems();
+    }
+
+      document.querySelectorAll('.add-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const item = this.parentElement.dataset.item;
+          const price = parseFloat(this.parentElement.dataset.price);
+          const quantity = parseInt(this.previousElementSibling.value);
+          addToOrder(item, price, quantity);
+        });
+      });
+
+      document.getElementById('pay-button').addEventListener('click', calculateChange);
+
+    function printReceipt() {
+      let receiptContent = '<div class="print-receipt">';
+      receiptContent += '<h2>Receipt</h2>';
+      receiptContent += '<ul>';
+      for (const item in orderedItems) {
+        receiptContent += `<li>${item} x${orderedItems[item]}</li>`;
+      }
+      receiptContent += '</ul>';
+      receiptContent += `<p><strong>Total:</strong> $${totalAmount.toFixed(2)}</p>`;
+      receiptContent += '</div>';
+
+      // Open a new window and write receipt content to it
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(receiptContent);
+      printWindow.document.close();
+      printWindow.print();
+    }
+
+    // Event listener for print button
+    document.getElementById('print-button').addEventListener('click', printReceipt);
+
+    function searchMenuItems(query) {
+  const menuItems = document.querySelectorAll('.menu-item');
+  menuItems.forEach(item => {
+    const itemName = item.dataset.item.toLowerCase();
+    if (itemName.includes(query.toLowerCase())) {
+      item.style.display = 'block'; // Show item if it matches the query
+    } else {
+      item.style.display = 'none'; // Hide item if it doesn't match the query
+    }
+  });
+}
+
+// Event listener for search button
+    document.getElementById('search-button').addEventListener('click', function() {
+      const searchQuery = document.getElementById('search-input').value;
+      searchMenuItems(searchQuery);
+    });
+
+  </script>
+</body>
+</html>
